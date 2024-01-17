@@ -13,7 +13,7 @@ def get_rates(currencies, days=30):
     requete = f"https://www.docstring.fr/api/rates/history/?start_at={start_date}&end_at={end_date}&symbols={symbole}"
     r = requests.get(requete)
     if not r and not r.json():
-        return False, False
+        return [], {}
 
     api_rates = r.json().get("rates")
     all_rates = {currency: [] for currency in currencies}

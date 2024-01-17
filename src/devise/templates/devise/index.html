@@ -5,9 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-trendline"></script>
   <title>Dashboard Devise</title>
 </head>
-<body class="bg-light">
+<body class="bg-dark">
     <!-- <h1>Tableau de bord devise</h1>
     {% for i in liste %}
       <h2>{{i}}</h2>
@@ -15,6 +16,14 @@
 
     <!-- Chart creation -->
     <div class="container-fluid">
+      <div class="row">
+        <div class="col ">
+          <h1 class="text-white text-center mb-4">Tableau de Bord - {{page_label}}</h1>
+          <a href="{% url 'home' days_range=7 currencies=currencies%}" class="btn {% if page_label == 'Semaine'%} btn-info {% else %} btn-secondary {%endif%}">Semaine</a>
+          <a href="{% url 'home' days_range=30 currencies=currencies%}" class="btn {% if page_label == 'Mois'%} btn-info {% else %} btn-secondary {%endif%}">Mois</a>
+          <a href="{% url 'home' days_range=365 currencies=currencies%}" class="btn {% if page_label == 'Année'%} btn-info {% else %} btn-secondary {%endif%}">Année</a>
+        </div>
+      </div>
       <div class="row justify-content-center">
         {% for currency, rate in rates.items %}
         <div class="col-md-10 col-lg-8 mt-4">
@@ -26,16 +35,21 @@
 
     <script>
       {% for currency, rate in rates.items %}
-        var ctx = document.getElementById("charset-{{currency}}").getContext("2d");
+        var ctx = document.getElementById("charset-{{currency}}");
         new Chart(ctx, {
           type: 'line',
           data: {
             labels: {{ days|safe }},
             datasets: [{
-              label: "{{currency}}",
+              label: "{{ currency }}",
               data: {{ rate|safe }},
               fill: true,
-              borderColor: 'rgb(255, 128, 128)'
+              borderColor: 'rgb(255, 128, 128)',
+              trendlineLinear: {
+                width: 2,
+                colorMin: "blue",
+		            colorMax: "green"
+              }
             }]
           }
         });
