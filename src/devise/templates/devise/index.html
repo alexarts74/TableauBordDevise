@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js" crossorigin="anonymous"></script>
+  <title>Dashboard Devise</title>
+</head>
+<body class="bg-light">
+    <!-- <h1>Tableau de bord devise</h1>
+    {% for i in liste %}
+      <h2>{{i}}</h2>
+    {% endfor %} -->
+
+    <!-- Chart creation -->
+    <div class="container-fluid">
+      <div class="row justify-content-center">
+        {% for currency, rate in rates.items %}
+        <div class="col-md-10 col-lg-8 mt-4">
+          <canvas id="charset-{{currency}}"></canvas>
+        </div>
+        {%endfor%}
+      </div>
+    </div>
+
+    <script>
+      {% for currency, rate in rates.items %}
+        var ctx = document.getElementById("charset-{{currency}}").getContext("2d");
+        new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: {{ days|safe }},
+            datasets: [{
+              label: "{{currency}}",
+              data: {{ rate|safe }},
+              fill: true,
+              borderColor: 'rgb(255, 128, 128)'
+            }]
+          }
+        });
+      {%endfor%}
+    </script>
+</body>
+</html>
